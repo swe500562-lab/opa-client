@@ -1,17 +1,13 @@
 {
   "schemaVersion": 1,
-  "id": "opa-client",
+  "id": "opaclient",
   "version": "${version}",
   "name": "OPA CLIENT",
   "description": "Client-side utility mod for Minecraft 1.21.11.",
-  "authors": [
-    "OPA CLIENT"
-  ],
+  "authors": ["OPA CLIENT"],
   "environment": "client",
   "entrypoints": {
-    "client": [
-      "de.opaclient.OpaClient"
-    ]
+    "client": ["de.opaclient.OpaClient"]
   },
   "depends": {
     "fabricloader": ">=0.18.0",
