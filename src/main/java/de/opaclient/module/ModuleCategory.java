@@ -3,11 +3,7 @@ package de.opaclient.module;
 public enum ModuleCategory {
     BASE_FINDS("Base Finds"),
     RENDER("Render"),
-    HUD("HUD"),
-    PLAYER("Player"),
-    WORLD("World"),
-    MISC("Misc"),
-    COSMETICS("Cosmetics");
+    HUD("HUD");
 
     private final String displayName;
 
