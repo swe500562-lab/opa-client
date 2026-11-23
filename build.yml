@@ -1,5 +1,5 @@
 
-name: OPA-Client erstellen
+name: OPA CLIENT Build
 
 on:
   push:
@@ -13,11 +13,11 @@ permissions:
 
 jobs:
   build:
-    name: Build OPA Client
+    name: Build OPA CLIENT
     runs-on: ubuntu-latest
 
     steps:
-      - name: Repository herunterladen
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Java 21 installieren
@@ -26,15 +26,18 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: Gradle 9.2.1 einrichten
+      - name: Gradle 9.2.1 installieren
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.2.1'
 
-      - name: OPA CLIENT bauen
+      - name: Gradle-Version prüfen
+        run: gradle --version
+
+      - name: Client bauen
         run: gradle --no-daemon clean build
 
-      - name: JAR als ZIP-Artifact speichern
+      - name: JAR hochladen
         uses: actions/upload-artifact@v4
         with:
           name: OPA-CLIENT-Minecraft-1.21.11
