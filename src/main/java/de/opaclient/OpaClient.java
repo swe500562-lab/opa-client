@@ -32,9 +32,10 @@ public final class OpaClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ModuleRegistry.registerDefaults();
+        KeyBinding.Category opaCategory = KeyBinding.Category.create(Identifier.of(MOD_ID, "main"));
         openGuiKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.opaclient.open_gui", InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_RIGHT_SHIFT, KeyBinding.Category.MISC
+                GLFW.GLFW_KEY_RIGHT_SHIFT, opaCategory
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
