@@ -1,8 +1,11 @@
-name: Build OPA Client
+
+name: OPA-Client erstellen
 
 on:
   push:
-  pull_request:
+    branches:
+      - main
+      - master
   workflow_dispatch:
 
 permissions:
@@ -10,27 +13,30 @@ permissions:
 
 jobs:
   build:
+    name: Build OPA Client
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout source
+      - name: Repository herunterladen
         uses: actions/checkout@v4
-      - name: Set up Java 21
+
+      - name: Java 21 installieren
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '21'
-      - name: Set up Gradle
+
+      - name: Gradle 9.2.1 einrichten
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.2.1'
-      - name: Build remapped Fabric mod
+
+      - name: OPA CLIENT bauen
         run: gradle --no-daemon clean build
-      - name: Upload JAR and install ZIP
+
+      - name: JAR als ZIP-Artifact speichern
         uses: actions/upload-artifact@v4
         with:
           name: OPA-CLIENT-Minecraft-1.21.11
-          path: |
-            build/libs/opa-client-0.1.0.jar
-            build/distributions/*.zip
+          path: build/libs/*.jar
           if-no-files-found: error
-          retention-days: 30
