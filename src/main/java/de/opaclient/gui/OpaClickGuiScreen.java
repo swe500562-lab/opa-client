@@ -3,6 +3,7 @@ package de.opaclient.gui;
 import de.opaclient.module.ClientModule;
 import de.opaclient.module.ModuleCategory;
 import de.opaclient.module.ModuleRegistry;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
@@ -71,8 +72,10 @@ public final class OpaClickGuiScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button != 0) return super.mouseClicked(mouseX, mouseY, button);
+    public boolean mouseClicked(Click click, boolean doubled) {
+        double mouseX = click.x();
+        double mouseY = click.y();
+        if (click.button() != 0) return super.mouseClicked(click, doubled);
         int l = left(), t = top(), r = right(), index = 0;
         for (ModuleCategory category : ModuleCategory.values()) {
             int y = t + 73 + index * 34;
@@ -95,7 +98,7 @@ public final class OpaClickGuiScreen extends Screen {
             }
             y += 49;
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(click, doubled);
     }
 
     @Override
