@@ -13,37 +13,42 @@ public final class ModuleRegistry {
     public static void registerDefaults() {
         if (registered) return;
         registered = true;
-        add("Storage ESP", "Markiert nur lokal geladene Kisten, Fässer und Shulkerboxen.", ModuleCategory.BASE_FINDS);
-        add("Spawner Notifier", "Listet lokal geladene Spawner in der Nähe.", ModuleCategory.BASE_FINDS);
-        add("Spawner Name Tags", "Zeigt den Mob-Typ nur an, wenn die Spawner-Daten lokal vorliegen.", ModuleCategory.BASE_FINDS);
-        add("Chunk Finder", "Zeigt die Koordinaten deines aktuellen Chunks.", ModuleCategory.BASE_FINDS);
-        add("Activity Chunks", "Zeigt nur Spieler, die deinem Client aktuell bekannt sind.", ModuleCategory.BASE_FINDS);
-        add("Player Chunks", "Zeigt Chunk-Koordinaten aktuell clientseitig geladener Spieler.", ModuleCategory.BASE_FINDS);
-        add("Block ESP", "Zeigt Informationen zum Block, den du gerade ansiehst.", ModuleCategory.BASE_FINDS);
 
-        add("Full Bright", "Erhöht lokal die Gamma-Einstellung.", ModuleCategory.RENDER);
-        add("Ambience", "Lokale Anzeigeoption (in Entwicklung).", ModuleCategory.RENDER);
-        add("Zoom", "Lokaler Zoom (in Entwicklung).", ModuleCategory.RENDER);
-        add("Block Outlines", "Vanilla-Blockauswahl bleibt aktiv.", ModuleCategory.RENDER);
-        add("General HUD", "Schaltet OPA-HUD-Elemente frei.", ModuleCategory.HUD);
-        add("Array List", "Zeigt aktivierte OPA-Module.", ModuleCategory.HUD);
-        add("Armor HUD", "Eigene Rüstungsanzeige (in Entwicklung).", ModuleCategory.HUD);
-        add("Target HUD", "Zeigt das aktuell anvisierte Wesen.", ModuleCategory.HUD);
-        add("Watermark", "OPA-Client-Kennzeichnung.", ModuleCategory.HUD);
-        add("Notifications", "Lokale Statusanzeige (in Entwicklung).", ModuleCategory.HUD);
-        add("Keybinds", "Tastenübersicht (in Entwicklung).", ModuleCategory.HUD);
-        add("Coordinates", "Zeigt deine eigenen Koordinaten.", ModuleCategory.HUD);
-        add("Panic", "Schaltet alle OPA-Module aus.", ModuleCategory.MISC);
-        add("Add Friends", "Lokale Freundesliste (in Entwicklung).", ModuleCategory.MISC);
-        add("Cosmetics", "Kosmetische Darstellung (in Entwicklung).", ModuleCategory.COSMETICS);
-        add("Backpacks", "Kosmetische Rucksack-Darstellung (in Entwicklung).", ModuleCategory.COSMETICS);
-        add("Wings", "Kosmetische Flügel-Darstellung (in Entwicklung).", ModuleCategory.COSMETICS);
+        add(new ClientModule("Storage ESP", "Zeigt lokal geladene Kisten, Fässer und Shulkerboxen.", ModuleCategory.BASE_FINDS)
+                .addNumber("Reichweite", "Maximale Entfernung in Blöcken", 32, 8, 64, 8)
+                .addNumber("Max. Anzeigen", "Wie viele Objekte gelistet werden", 5, 1, 15, 1)
+                .addBoolean("Koordinaten", "Positionen in der HUD-Liste anzeigen", true));
+        add(new ClientModule("Spawner Notifier", "Meldet Spawner, deren Daten dein Client geladen hat.", ModuleCategory.BASE_FINDS)
+                .addNumber("Reichweite", "Maximale Entfernung in Blöcken", 48, 8, 96, 8)
+                .addNumber("Max. Anzeigen", "Wie viele Spawner gelistet werden", 5, 1, 15, 1)
+                .addBoolean("Koordinaten", "Spawner-Positionen anzeigen", true));
+        add(new ClientModule("Spawner Name Tags", "Zeigt den lokal bekannten Spawner-Mobtyp als Text.", ModuleCategory.BASE_FINDS)
+                .addNumber("Reichweite", "Maximale Entfernung in Blöcken", 48, 8, 96, 8)
+                .addBoolean("Koordinaten", "Spawner-Positionen anzeigen", true));
+        add(new ClientModule("Chunk Finder", "Zeigt die Koordinaten deines aktuellen Chunks.", ModuleCategory.BASE_FINDS)
+                .addBoolean("HUD anzeigen", "Chunk-Info links oben anzeigen", true));
+        add(new ClientModule("Activity Chunks", "Listet nur Spieler, die deinem Client aktuell bekannt sind.", ModuleCategory.BASE_FINDS)
+                .addNumber("Spieler-Limit", "Maximale Anzahl angezeigter Spieler", 5, 1, 10, 1)
+                .addBoolean("Chunk-Koordinaten", "Chunk-Positionen in der Liste anzeigen", true));
+        add(new ClientModule("Player Chunks", "Zeigt Chunk-Koordinaten aktuell geladener Spieler.", ModuleCategory.BASE_FINDS)
+                .addNumber("Spieler-Limit", "Maximale Anzahl angezeigter Spieler", 5, 1, 10, 1));
+        add(new ClientModule("Block ESP", "Zeigt Informationen zum Block unter deinem Fadenkreuz.", ModuleCategory.BASE_FINDS)
+                .addBoolean("Blockname", "Den Namen des anvisierten Blocks anzeigen", true));
+
+        add(new ClientModule("Full Bright", "Erhöht lokal die Helligkeit.", ModuleCategory.RENDER)
+                .addNumber("Helligkeit", "Lokaler Gamma-Wert", 16, 2, 16, 2));
+        add(new ClientModule("Target HUD", "Zeigt den Namen des aktuell anvisierten Wesens.", ModuleCategory.RENDER)
+                .addBoolean("Anzeigen", "Target-Info am unteren Bildschirmrand anzeigen", true));
+
+        add(new ClientModule("Watermark", "Zeigt die OPA CLIENT Kennzeichnung.", ModuleCategory.HUD)
+                .addBoolean("Anzeigen", "Watermark ein- oder ausblenden", true));
+        add(new ClientModule("Coordinates", "Zeigt deine eigenen Koordinaten.", ModuleCategory.HUD)
+                .addBoolean("Anzeigen", "Koordinaten-HUD ein- oder ausblenden", true));
+        add(new ClientModule("Array List", "Zeigt rechts die aktivierten Module.", ModuleCategory.HUD)
+                .addBoolean("Anzeigen", "Aktive Modulliste ein- oder ausblenden", true));
     }
 
-    private static void add(String name, String description, ModuleCategory category) {
-        MODULES.add(new ClientModule(name, description, category));
-    }
-
+    private static void add(ClientModule module) { MODULES.add(module); }
     public static List<ClientModule> all() { return Collections.unmodifiableList(MODULES); }
     public static List<ClientModule> inCategory(ModuleCategory category) {
         return MODULES.stream().filter(m -> m.category() == category).toList();
